@@ -4,35 +4,70 @@ import {
   ArrowIosBackOutline,
   ArrowIosForwardOutline,
 } from "@styled-icons/evaicons-outline";
-import MovieProps from "../../interfaces/movieInterface";
+import IMovieProps from "../../interfaces/moviesInterface";
 import { toLocaleDateString } from "../../commons/utils/date";
+import IMoviesResults from "../../interfaces/moviesresultinterface";
 
 interface IProps {
-  movie: MovieProps;
+  movieCount: number;
+  page: number;
+  total_pages: number;
+  moviesResults: IMoviesResults;
   handleFWClick: Function;
+  handleBWClick: Function;
 }
 
 function MovieContent(props: IProps) {
-  const { movie, handleFWClick } = props;
+  const {
+    moviesResults,
+    handleFWClick,
+    handleBWClick,
+    page,
+    total_pages,
+    movieCount,
+  } = props;
 
-  const date = toLocaleDateString(movie.release_date);
+  var date = "Indisponível";
+  if (
+    moviesResults.release_date !== null ||
+    moviesResults.release_date !== undefined
+  ) {
+    date = toLocaleDateString(moviesResults.release_date);
+  }
 
   return (
     <MainSection>
-      <ArrowBack size={200} />
+      {((page !== 1 && movieCount !== 0) ||
+        (page === 1 && movieCount !== 0) ||
+        (page !== 1 && movieCount === 0)) && (
+        <ArrowBack
+          size={200}
+          onClick={() => {
+            handleBWClick();
+          }}
+        />
+      )}
+      {page === 1 && movieCount === 0 && <ArrowBack size={200} />}
       <SectionMovie>
         <MovieArticle>
           <MovieText>
-            <MovieTitle>{movie.title}</MovieTitle>
-            <MovieParagraph>{movie.overview}</MovieParagraph>
+            <MovieTitle>{moviesResults.original_title}</MovieTitle>
+            <MovieParagraph>{moviesResults.overview}</MovieParagraph>
           </MovieText>
           <footer>
             <MovieDate>{date}</MovieDate>
           </footer>
         </MovieArticle>
-        <MoviePoster src={movie.url_img} alt="Movie Poster" />
+        <MoviePoster
+          src={
+            "https://image.tmdb.org/t/p/original/" + moviesResults.poster_path
+          }
+          alt="Movie Poster"
+        />
       </SectionMovie>
-      <ArrowNext size={200} onClick={() => handleFWClick()} />
+      {page !== total_pages && movieCount < 20 && (
+        <ArrowNext size={200} onClick={() => handleFWClick()} />
+      )}
     </MainSection>
   );
 }
@@ -88,6 +123,12 @@ const MoviePoster = styled.img`
   width: auto;
   height: auto;
   object-fit: cover;
+  transition: 0.3s;
+  &:hover {
+    -webkit-box-shadow: 7px 7px 24px 6px rgba(0, 0, 0, 0.59);
+    box-shadow: 7px 7px 24px 6px rgba(0, 0, 0, 0.59);
+    transform: scale(1.1);
+  }
 `;
 
 const MovieTitle = styled.h1`
