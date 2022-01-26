@@ -67,7 +67,7 @@ function MovieContent(props: IProps) {
 export default MovieContent;
 
 const ArrowBack = styled(ArrowIosBackOutline)`
-  color: #ffff;
+  color: #d6dceb;
   transition: 0.3s;
   &:hover {
     transform: scale(1.5);
@@ -76,7 +76,7 @@ const ArrowBack = styled(ArrowIosBackOutline)`
 `;
 
 const ArrowNext = styled(ArrowIosForwardOutline)`
-  color: #ffff;
+  color: #d6dceb;
   transition: 0.3s;
   &:hover {
     transform: scale(1.5);
@@ -101,7 +101,6 @@ const SectionMovie = styled.section`
 `;
 
 const MovieArticle = styled.article`
-  color: #fff;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

@@ -90,7 +90,7 @@ export default function App() {
 }
 
 const Site = styled.div`
-  background-color: #1c1259;
+  background-color: #120635;
   display: flex;
   flex-direction: column;
   max-width: 100vw;
@@ -110,5 +110,5 @@ const MainContainer = styled.div`
 const MainTitle = styled.h1`
   margin: 0 0 15px 0;
   font-size: 6rem;
-  color: #ffff;
+  color: #d6dceb;
 `;

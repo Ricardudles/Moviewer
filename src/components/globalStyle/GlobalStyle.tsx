@@ -11,11 +11,13 @@ export const GlobalStyle = createGlobalStyle`
   @import url("https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap");
   @import url("https://fonts.googleapis.com/css2?family=Pangolin&display=swap");
 
-  & h1 {
+  & h1, h2, h3 {
     font-family: "Roboto", sans-serif;
+    color: #d6dceb;
   }
 
   & p {
     font-family: "Pangolin", sans-serif;
+    color: #d6dceb;
   }
 `;
