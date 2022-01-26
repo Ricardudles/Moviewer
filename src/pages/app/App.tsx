@@ -8,14 +8,14 @@ import { getMovies } from "../../services/movieService/movieService";
 export default function App() {
   const isMounted = useRef(true);
   const [movieCount, setMovieCount] = useState(0);
-  const [moviePage, setMoviePage] = useState(1);
-  const [movies, setMovies] = useState<IMoviesProps>({
+  const [page, setPage] = useState(1);
+  const [moviesList, setMoviesList] = useState<IMoviesProps>({
     page: 1,
     results: [
       {
         original_title: "Title",
         overview: "Overview",
-        poster_path: "https://picsum.photos/480/600",
+        poster_path: "/ndlQ2Cuc3cjTL7lTynw6I4boP4S.jpg",
         release_date: "10/12/2022",
       },
     ],
@@ -23,60 +23,51 @@ export default function App() {
     total_results: 10000,
   });
 
-  const onFirstUpdate = async (page: number) => {
-    const moviesReq: IMoviesProps = await getMovies(page);
-
-    if (isMounted.current) {
-      setMovies(moviesReq);
+  const handleFWClick: Function = () => {
+    if (moviesList && moviesList.total_results >= movieCount) {
+      setMovieCount((movieCount) => movieCount + 1);
+      console.log("Adicionado mais um: ", movieCount);
     }
-    console.log("PRIMEIRO UPDATE: ", movieCount);
-    console.log("PRIMEIRO MOVIES: ", movies);
+
+    if (movieCount === 19 && moviesList.total_pages !== moviesList.page) {
+      setMovieCount((movieCount) => (movieCount = 0));
+      setPage((page) => page + 1);
+      console.log("Aumentado o numero da página: ", page);
+    }
+  };
+
+  const handleBWClick: Function = () => {
+    if (moviesList && movieCount > 0) {
+      setMovieCount((movieCount) => movieCount - 1);
+      console.log("Retirado mais um: ", movieCount);
+    }
+
+    if (movieCount === 0 && page !== 1) {
+      setMovieCount((movieCount) => (movieCount = 19));
+      setPage((page) => page - 1);
+      console.log("Diminuido o numero da página: ", page);
+    }
   };
 
   const onUpdate = async (page: number) => {
     const moviesReq: IMoviesProps = await getMovies(page);
 
-    setMovies(moviesReq);
+    console.log("moviesREq", moviesReq);
 
-    console.log("UPDATE: ", movieCount);
-    console.log("MOVIES: ", movies);
-  };
-
-  const handleFWClick: Function = () => {
-    if (movieCount >= 0) {
-      setMovieCount(movieCount + 1);
+    if (isMounted.current) {
+      setMoviesList((prev) => (prev = moviesReq));
+      console.log("Lista de filmes: ", moviesList);
     }
-    console.log("AUMENTANDO: ", movieCount);
-  };
-
-  const handleBWClick: Function = () => {
-    if (movieCount >= -1) {
-      setMovieCount(movieCount - 1);
-    }
-    console.log("DIMINUINDO: ", movieCount);
   };
 
   useEffect(() => {
-    onFirstUpdate(moviePage);
+    isMounted.current = true;
 
+    onUpdate(page);
     return () => {
       isMounted.current = false;
     };
-  }, []);
-
-  useEffect(() => {
-    if (movieCount === 20) {
-      console.log("entrou proxima pagina");
-      setMoviePage(moviePage + 1);
-      setMovieCount(0);
-      onUpdate(moviePage);
-    } else if (movieCount < 0 && moviePage > 1) {
-      console.log("entrou pagina anterior");
-      setMoviePage(moviePage - 1);
-      setMovieCount(19);
-      onUpdate(moviePage);
-    }
-  }, [movieCount]);
+  }, [page]);
 
   return (
     <Site>
@@ -84,10 +75,10 @@ export default function App() {
       <MainContainer>
         <MovieContent
           movieCount={movieCount}
-          page={movies.page}
-          total_pages={movies.total_pages}
+          page={moviesList.page}
+          total_pages={moviesList.total_pages}
           moviesResults={
-            movies.results[movieCount >= 0 && movieCount <= 19 ? movieCount : 0]
+            moviesList.results[movieCount !== undefined ? movieCount : 0]
           }
           handleFWClick={handleFWClick}
           handleBWClick={handleBWClick}

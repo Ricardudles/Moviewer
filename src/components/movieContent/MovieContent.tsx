@@ -4,17 +4,16 @@ import {
   ArrowIosBackOutline,
   ArrowIosForwardOutline,
 } from "@styled-icons/evaicons-outline";
-import IMovieProps from "../../interfaces/moviesInterface";
 import { toLocaleDateString } from "../../commons/utils/date";
 import IMoviesResults from "../../interfaces/moviesresultinterface";
 
 interface IProps {
-  movieCount: number;
-  page: number;
-  total_pages: number;
   moviesResults: IMoviesResults;
   handleFWClick: Function;
   handleBWClick: Function;
+  page: number;
+  total_pages: number;
+  movieCount: number;
 }
 
 function MovieContent(props: IProps) {
@@ -22,8 +21,8 @@ function MovieContent(props: IProps) {
     moviesResults,
     handleFWClick,
     handleBWClick,
-    page,
     total_pages,
+    page,
     movieCount,
   } = props;
 
@@ -37,17 +36,12 @@ function MovieContent(props: IProps) {
 
   return (
     <MainSection>
-      {((page !== 1 && movieCount !== 0) ||
-        (page === 1 && movieCount !== 0) ||
-        (page !== 1 && movieCount === 0)) && (
-        <ArrowBack
-          size={200}
-          onClick={() => {
-            handleBWClick();
-          }}
-        />
-      )}
-      {page === 1 && movieCount === 0 && <ArrowBack size={200} />}
+      <ArrowBack
+        size={200}
+        onClick={() => {
+          handleBWClick();
+        }}
+      />
       <SectionMovie>
         <MovieArticle>
           <MovieText>
@@ -65,9 +59,7 @@ function MovieContent(props: IProps) {
           alt="Movie Poster"
         />
       </SectionMovie>
-      {page !== total_pages && movieCount < 20 && (
-        <ArrowNext size={200} onClick={() => handleFWClick()} />
-      )}
+      <ArrowNext size={200} onClick={() => handleFWClick()} />
     </MainSection>
   );
 }

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const getMovies = (page: number) => {
-  console.log(page);
+  console.log("página a ser enviada pra API", page);
   return axios
     .get(
       "https://api.themoviedb.org/3/movie/popular?api_key=" +
